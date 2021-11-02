@@ -33,7 +33,7 @@ public class ReceivedMessageDao {
     }
 
     public void createMessageHeaderTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS message_body (id bigserial NOT NULL," +
+        String sql = "CREATE TABLE IF NOT EXISTS message_header (id bigserial NOT NULL," +
                 "delivery_mode int NULL, destination text NULL, created bigint NULL, message_id text NULL," +
                 "priority int NULL," +
                 "CONSTRAINT message_header_pk PRIMARY KEY (id), CONSTRAINT message_header_un UNIQUE (message_id)";
