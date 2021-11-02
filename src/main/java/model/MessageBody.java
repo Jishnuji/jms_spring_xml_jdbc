@@ -1,6 +1,8 @@
 package model;
 
 import dao.ReceivedMessageDao;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
 import util.Util;
 
@@ -23,7 +25,7 @@ public class MessageBody {
         this.textBody = textMessage.getText();
         this.messageID = message.getJMSMessageID();
 
-        setReceivedMessageDao(new ReceivedMessageDao(new Util()));
+        setReceivedMessageDao(new ReceivedMessageDao(new DriverManagerDataSource()));
         receivedMessageDao.saveMessageBodyDao(messageID, textBody);
     }
 }
