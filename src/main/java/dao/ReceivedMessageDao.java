@@ -21,7 +21,7 @@ public class ReceivedMessageDao {
         String sql = "CREATE TABLE IF NOT EXISTS message_body (id bigserial NOT NULL," +
                 "message_id text not NULL, body text NULL, CONSTRAINT message_body_pk PRIMARY KEY (id)," +
                 "CONSTRAINT message_body_un UNIQUE (message_id)," +
-                "CONSTRAINT message_body_fk FOREIGN KEY (message_id) REFERENCES message_header(message_id)";
+                "CONSTRAINT message_body_fk FOREIGN KEY (message_id) REFERENCES message_header(message_id))";
         try (Connection connection = util.getConnect(); Statement statement = connection.createStatement()){
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             connection.setAutoCommit(false);
@@ -36,7 +36,7 @@ public class ReceivedMessageDao {
         String sql = "CREATE TABLE IF NOT EXISTS message_header (id bigserial NOT NULL," +
                 "delivery_mode int NULL, destination text NULL, created bigint NULL, message_id text NULL," +
                 "priority int NULL," +
-                "CONSTRAINT message_header_pk PRIMARY KEY (id), CONSTRAINT message_header_un UNIQUE (message_id)";
+                "CONSTRAINT message_header_pk PRIMARY KEY (id), CONSTRAINT message_header_un UNIQUE (message_id))";
         try (Connection connection = util.getConnect(); Statement statement = connection.createStatement()){
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             connection.setAutoCommit(false);
