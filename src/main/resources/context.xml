@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <!-- Configuration -->
+
+    <bean id="activeMQConnectionFactory"
+          class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="vm://broker" />
+    </bean>
+
+<!--    <bean id="queue" class="org.apache.activemq.command.ActiveMQQueue">-->
+<!--        <constructor-arg value="standalone.queue" />-->
+<!--    </bean>-->
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="defaultDestinationName" value="standalone.queue"/>
+        <property name="connectionFactory" ref="activeMQConnectionFactory" />
+    </bean>
+
+    <bean id="container" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="activeMQConnectionFactory" />
+        <property name="destinationName" value="standalone.queue"/>
+        <property name="messageListener" ref="messageReceiver"/>
+    </bean>
+
+    <!-- Service -->
+    <bean id="messageReceiver" class="service.MessageReceiver" >
+        <constructor-arg ref="messageBody"/>
+        <constructor-arg ref="messageHeader"/>
+    </bean>
+
+    <bean id="messageSender" class="service.MessageSender" >
+        <constructor-arg ref="jmsTemplate"/>
+    </bean>
+
+    <bean id="scheduledMessageSender" class="service.ScheduledMessageSender">
+        <constructor-arg ref="messageSender"/>
+    </bean>
+
+    <task:scheduled-tasks>
+        <task:scheduled ref="scheduledMessageSender" method="startMessageSender" fixed-delay="3000"/>
+    </task:scheduled-tasks>
+
+    <!--  Model  -->
+    <bean id="messageBody" class="model.MessageBody">
+        <property name="receivedMessageDao" ref="receivedMessageDao"/>
+    </bean>
+
+    <bean id="messageHeader" class="model.MessageHeader"/>
+
+    <!--  Dao  -->
+    <bean id="receivedMessageDao" class="dao.ReceivedMessageDao">
+    <constructor-arg ref="util"/>
+    </bean>
+    <!--  Util  -->
+    <bean id="util" class="util.Util"/>
+
+</beans>
