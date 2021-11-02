@@ -23,8 +23,9 @@ public class MessageReceiver implements MessageListener{
     public void onMessage(Message message) {
         try {
             LOG2.info("Received text: " + ((TextMessage) message).getText());
-            messageBody.getMessageBody(message);
             messageHeader.getMessageHeaders(message);
+            messageBody.getMessageBody(message);
+
 
         } catch (JMSException e) {
             LOG.error("There is some error occurred " + e);

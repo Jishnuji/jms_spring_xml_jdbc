@@ -9,8 +9,9 @@ public class ProducerApplication {
         ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
 
         ReceivedMessageDao receivedMessageDao = context.getBean(ReceivedMessageDao.class);
-        receivedMessageDao.createMessageHeaderTable();
         receivedMessageDao.createMessageBodyTable();
+        receivedMessageDao.createMessageHeaderTable();
+
         Thread.sleep(2000);
 
     }
