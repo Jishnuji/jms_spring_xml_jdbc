@@ -1,10 +1,6 @@
 package model;
 
 import dao.ReceivedMessageDao;
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.stereotype.Component;
-import util.Util;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -16,7 +12,10 @@ public class MessageHeader {
     private long messageTimestamp;
     private int priority;
 
-    private static ReceivedMessageDao receivedMessageDao = new ReceivedMessageDao(new DriverManagerDataSource());
+    private static ReceivedMessageDao receivedMessageDao;
+    public void setReceivedMessageDao(ReceivedMessageDao receivedMessageDao) {
+        this.receivedMessageDao = receivedMessageDao;
+    }
 
     public void getMessageHeaders(Message message) throws JMSException {
         this.messageId = message.getJMSMessageID();

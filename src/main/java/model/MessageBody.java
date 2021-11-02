@@ -25,7 +25,6 @@ public class MessageBody {
         this.textBody = textMessage.getText();
         this.messageID = message.getJMSMessageID();
 
-        setReceivedMessageDao(new ReceivedMessageDao(new DriverManagerDataSource()));
         receivedMessageDao.saveMessageBodyDao(messageID, textBody);
     }
 }

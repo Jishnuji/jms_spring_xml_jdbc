@@ -1,18 +1,14 @@
 package dao;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ReceivedMessageDao {
-    private DriverManagerDataSource util;
+    private final DriverManagerDataSource util;
     private static Logger LOG = LoggerFactory.getLogger(ReceivedMessageDao.class);
 
     public ReceivedMessageDao(DriverManagerDataSource util) {
@@ -51,7 +47,8 @@ public class ReceivedMessageDao {
 
     public void saveMessageBodyDao (String messageID, String messageBody) {
         String sql = "INSERT INTO message_body(message_id, body) VALUES (?, ?)";
-        try(Connection connection = util.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)){
+        try(Connection connection = util.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             connection.setAutoCommit(false);
             statement.setString(1, messageID);
@@ -66,7 +63,8 @@ public class ReceivedMessageDao {
     public void saveMessageHeaderDao (int deliveryMode, String destination, long messageTimestamp,
                                       String messageId, int priority) {
         String sql = "INSERT INTO message_header(delivery_mode, destination, created, message_id, priority) VALUES (?, ?, ?, ?, ?)";
-        try(Connection connection = util.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)){
+        try(Connection connection = util.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             connection.setAutoCommit(false);
             statement.setInt(1, deliveryMode);
