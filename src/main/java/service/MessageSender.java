@@ -26,7 +26,7 @@ public class MessageSender {
                 try {
                     textMessage = session.createTextMessage(message);
                 } catch (JMSException e) {
-                    LOG.error("There is some JMSException occurred in process of creating message. " + e);
+                    LOG.error("There is some JMSException occurred in process of message creating. " + e);
                 }
                 return textMessage;
             }
